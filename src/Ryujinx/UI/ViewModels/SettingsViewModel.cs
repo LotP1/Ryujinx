@@ -142,7 +142,7 @@ namespace Ryujinx.Ava.UI.ViewModels
         public bool EnableFsIntegrityChecks { get; set; }
         public bool IgnoreMissingServices { get; set; }
         public bool ExpandDramSize { get; set; }
-        public bool OverrideCoreCount {get; set; }
+        public bool OverrideCoreCount { get; set; }
         public int CoreCount { get; set; }
         public int CoreLimit => Environment.ProcessorCount < 4 ? 4 : Environment.ProcessorCount;
         public bool EnableShaderCache { get; set; }

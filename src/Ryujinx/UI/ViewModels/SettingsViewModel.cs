@@ -433,10 +433,10 @@ namespace Ryujinx.Ava.UI.ViewModels
             IgnoreMissingServices = config.System.IgnoreMissingServices;
             OverrideCoreCount = config.System.OverrideCoreCount;
             CoreCount = config.System.CoreCount;
-            if (CoreCount > CoreLimit)
+            if (CoreCount < 4)
             {
-                CoreCount = CoreLimit;
-                config.System.CoreCount.Value = CoreLimit;
+                CoreCount = 4;
+                config.System.CoreCount.Value = 4;
             }
 
             // CPU
@@ -533,7 +533,7 @@ namespace Ryujinx.Ava.UI.ViewModels
             config.System.ExpandRam.Value = ExpandDramSize;
             config.System.IgnoreMissingServices.Value = IgnoreMissingServices;
             config.System.OverrideCoreCount.Value = OverrideCoreCount;
-            config.System.CoreCount.Value = CoreCount;
+            config.System.CoreCount.Value = CoreCount < 4 ? 4 : CoreCount;
 
             // CPU
             config.System.EnablePtc.Value = EnablePptc;

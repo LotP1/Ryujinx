@@ -4,6 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:ui="clr-namespace:FluentAvalonia.UI.Controls;assembly=FluentAvalonia"
     xmlns:locale="clr-namespace:Ryujinx.Ava.Common.Locale"
     xmlns:viewModels="clr-namespace:Ryujinx.Ava.UI.ViewModels"
     xmlns:helpers="clr-namespace:Ryujinx.Ava.UI.Helpers"
@@ -221,14 +222,19 @@
                         Margin="0,0,0,10"
                         Orientation="Horizontal">
                         <CheckBox
-                        IsChecked="{Binding OverrideCoreCount}"
-                        ToolTip.Tip="No Tooltip">
-                        <TextBlock Text="Override CPU Core limit" />
-                    </CheckBox>
-                        <NumericUpDown
-                            Value="{Binding CoreCount}"
-                            Increment="1" 
-                            Minimum="4" Maximum="{Binding CoreLimit}"/>
+                            IsChecked="{Binding OverrideCoreCount}"
+                            ToolTip.Tip="No Tooltip"
+                            Width="250">
+                            <TextBlock Text="Override CPU Core limit" />
+                        </CheckBox>
+                        <ui:NumberBox
+                                Maximum="{Binding CoreLimit}"
+                                Minimum="4"
+                                Width="225"
+                                SpinButtonPlacementMode="Inline"
+                                SmallChange="1"
+                                LargeChange="1"
+                                Value="{Binding CoreCount}" />
                     </StackPanel>
                 </StackPanel>
             </StackPanel>

@@ -142,6 +142,9 @@ namespace Ryujinx.Ava.UI.ViewModels
         public bool EnableFsIntegrityChecks { get; set; }
         public bool IgnoreMissingServices { get; set; }
         public bool ExpandDramSize { get; set; }
+        public bool OverrideCoreCount {get; set; }
+        public int CoreCount { get; set; }
+        public int CoreLimit => Environment.ProcessorCount < 4 ? 4 : Environment.ProcessorCount;
         public bool EnableShaderCache { get; set; }
         public bool EnableTextureRecompression { get; set; }
         public bool EnableMacroHLE { get; set; }
@@ -428,6 +431,13 @@ namespace Ryujinx.Ava.UI.ViewModels
             EnableFsIntegrityChecks = config.System.EnableFsIntegrityChecks;
             ExpandDramSize = config.System.ExpandRam;
             IgnoreMissingServices = config.System.IgnoreMissingServices;
+            OverrideCoreCount = config.System.OverrideCoreCount;
+            CoreCount = config.System.CoreCount;
+            if (CoreCount > CoreLimit)
+            {
+                CoreCount = CoreLimit;
+                config.System.CoreCount.Value = CoreLimit;
+            }
 
             // CPU
             EnablePptc = config.System.EnablePtc;
@@ -522,6 +532,8 @@ namespace Ryujinx.Ava.UI.ViewModels
             config.System.EnableFsIntegrityChecks.Value = EnableFsIntegrityChecks;
             config.System.ExpandRam.Value = ExpandDramSize;
             config.System.IgnoreMissingServices.Value = IgnoreMissingServices;
+            config.System.OverrideCoreCount.Value = OverrideCoreCount;
+            config.System.CoreCount.Value = CoreCount;
 
             // CPU
             config.System.EnablePtc.Value = EnablePptc;

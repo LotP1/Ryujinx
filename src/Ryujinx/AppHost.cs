@@ -192,6 +192,8 @@ namespace Ryujinx.Ava
             }
 
             ConfigurationState.Instance.System.IgnoreMissingServices.Event += UpdateIgnoreMissingServicesState;
+            ConfigurationState.Instance.System.OverrideCoreCount.Event += UpdateOverrideCoreCountState;
+            ConfigurationState.Instance.System.CoreCount.Event += UpdateCoreCountState;
             ConfigurationState.Instance.Graphics.AspectRatio.Event += UpdateAspectRatioState;
             ConfigurationState.Instance.System.EnableDockedMode.Event += UpdateDockedModeState;
             ConfigurationState.Instance.System.AudioVolume.Event += UpdateAudioVolumeState;
@@ -446,6 +448,22 @@ namespace Ryujinx.Ava
             }
         }
 
+        private void UpdateOverrideCoreCountState(object sender, ReactiveEventArgs<bool> args)
+        {
+            if (Device != null)
+            {
+                Device.Configuration.OverrideCoreCount = args.NewValue;
+            }
+        }
+
+        private void UpdateCoreCountState(object sender, ReactiveEventArgs<int> args)
+        {
+            if (Device != null)
+            {
+                Device.Configuration.CoreCount = args.NewValue;
+            }
+        }
+
         private void UpdateAspectRatioState(object sender, ReactiveEventArgs<AspectRatio> args)
         {
             if (Device != null)
@@ -543,6 +561,8 @@ namespace Ryujinx.Ava
             }
 
             ConfigurationState.Instance.System.IgnoreMissingServices.Event -= UpdateIgnoreMissingServicesState;
+            ConfigurationState.Instance.System.OverrideCoreCount.Event -= UpdateOverrideCoreCountState;
+            ConfigurationState.Instance.System.CoreCount.Event -= UpdateCoreCountState;
             ConfigurationState.Instance.Graphics.AspectRatio.Event -= UpdateAspectRatioState;
             ConfigurationState.Instance.System.EnableDockedMode.Event -= UpdateDockedModeState;
             ConfigurationState.Instance.System.AudioVolume.Event -= UpdateAudioVolumeState;
@@ -868,6 +888,8 @@ namespace Ryujinx.Ava
                                                  ConfigurationState.Instance.System.TimeZone,
                                                  ConfigurationState.Instance.System.MemoryManagerMode,
                                                  ConfigurationState.Instance.System.IgnoreMissingServices,
+                                                 ConfigurationState.Instance.System.OverrideCoreCount,
+                                                 ConfigurationState.Instance.System.CoreCount,
                                                  ConfigurationState.Instance.Graphics.AspectRatio,
                                                  ConfigurationState.Instance.System.AudioVolume,
                                                  ConfigurationState.Instance.System.UseHypervisor,

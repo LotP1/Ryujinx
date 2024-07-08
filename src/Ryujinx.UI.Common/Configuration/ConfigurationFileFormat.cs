@@ -248,6 +248,16 @@ namespace Ryujinx.UI.Common.Configuration
         public bool IgnoreMissingServices { get; set; }
 
         /// <summary>
+        /// Enable or disable overriding usage of custom core counts used for emulation
+        /// </summary>
+        public bool OverrideCoreCount { get; set; }
+
+        /// <summary>
+        /// The overridden amount of cores used for emulation
+        /// </summary>
+        public int CoreCount { get; set; }
+
+        /// <summary>
         /// Used to toggle columns in the GUI
         /// </summary>
         public GuiColumns GuiColumns { get; set; }

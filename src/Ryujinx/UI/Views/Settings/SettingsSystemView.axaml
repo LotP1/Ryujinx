@@ -217,6 +217,19 @@
                         ToolTip.Tip="{locale:Locale IgnoreMissingServicesTooltip}">
                         <TextBlock Text="{locale:Locale SettingsTabSystemIgnoreMissingServices}" />
                     </CheckBox>
+                    <StackPanel
+                        Margin="0,0,0,10"
+                        Orientation="Horizontal">
+                        <CheckBox
+                        IsChecked="{Binding OverrideCoreCount}"
+                        ToolTip.Tip="No Tooltip">
+                        <TextBlock Text="Override CPU Core limit" />
+                    </CheckBox>
+                        <NumericUpDown
+                            Value="{Binding CoreCount}"
+                            Increment="1" 
+                            Minimum="4" Maximum="{Binding CoreLimit}"/>
+                    </StackPanel>
                 </StackPanel>
             </StackPanel>
         </Border>

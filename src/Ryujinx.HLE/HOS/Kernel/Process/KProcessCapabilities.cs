@@ -168,9 +168,14 @@ namespace Ryujinx.HLE.HOS.Kernel.Process
                             return KernelResult.InvalidCombination;
                         }
 
-                        if (highestCpuCore >= KScheduler.CpuCoresCount)
+                        if (KScheduler.CpuCoresCount == KScheduler.DefaultCpuCoresCount && highestCpuCore >= KScheduler.CpuCoresCount)
                         {
                             return KernelResult.InvalidCpuCore;
+                        }
+
+                        if (KScheduler.CpuCoresCount != KScheduler.DefaultCpuCoresCount)
+                        {
+                            highestCpuCore = (uint)KScheduler.CpuCoresCount - 2; //cpu cores are 0 indexed, highest cpu core should not include the main thread core
                         }
 
                         AllowedCpuCoresMask = GetMaskFromMinMax(lowestCpuCore, highestCpuCore);

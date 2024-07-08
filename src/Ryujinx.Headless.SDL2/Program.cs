@@ -567,6 +567,8 @@ namespace Ryujinx.Headless.SDL2
                 options.SystemTimeZone,
                 options.MemoryManagerMode,
                 options.IgnoreMissingServices,
+                options.CoreCount != 4,
+                options.CoreCount,
                 options.AspectRatio,
                 options.AudioVolume,
                 options.UseHypervisor ?? true,

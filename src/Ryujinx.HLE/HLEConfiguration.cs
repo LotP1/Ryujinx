@@ -140,6 +140,17 @@ namespace Ryujinx.HLE
         public bool IgnoreMissingServices { internal get; set; }
 
         /// <summary>
+        /// If true use (CoreCount) as the core limit instead of the default (4).
+        /// </summary>
+        public bool OverrideCoreCount { internal get; set; }
+
+        /// <summary>
+        /// The overridden amount of cores used for emulation.
+        /// Default 4.
+        /// </summary>
+        public int CoreCount { internal get; set; }
+
+        /// <summary>
         /// Aspect Ratio applied to the renderer window by the SurfaceFlinger service.
         /// </summary>
         public AspectRatio AspectRatio { get; set; }
@@ -190,6 +201,8 @@ namespace Ryujinx.HLE
                                 string timeZone,
                                 MemoryManagerMode memoryManagerMode,
                                 bool ignoreMissingServices,
+                                bool overrideCoreCount,
+                                int coreCount,
                                 AspectRatio aspectRatio,
                                 float audioVolume,
                                 bool useHypervisor,
@@ -217,6 +230,8 @@ namespace Ryujinx.HLE
             TimeZone = timeZone;
             MemoryManagerMode = memoryManagerMode;
             IgnoreMissingServices = ignoreMissingServices;
+            OverrideCoreCount = overrideCoreCount;
+            CoreCount = coreCount;
             AspectRatio = aspectRatio;
             AudioVolume = audioVolume;
             UseHypervisor = useHypervisor;

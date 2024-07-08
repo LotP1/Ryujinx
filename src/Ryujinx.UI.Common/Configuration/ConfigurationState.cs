@@ -362,6 +362,16 @@ namespace Ryujinx.UI.Common.Configuration
             public ReactiveObject<bool> IgnoreMissingServices { get; private set; }
 
             /// <summary>
+            /// Enable or disable overriding usage of custom core counts used for emulation
+            /// </summary>
+            public ReactiveObject<bool> OverrideCoreCount { get; private set; }
+
+            /// <summary>
+            /// The overridden amount of cores used for emulation
+            /// </summary>
+            public ReactiveObject<int> CoreCount { get; private set; }
+
+            /// <summary>
             /// Uses Hypervisor over JIT if available
             /// </summary>
             public ReactiveObject<bool> UseHypervisor { get; private set; }
@@ -390,6 +400,10 @@ namespace Ryujinx.UI.Common.Configuration
                 ExpandRam.Event += static (sender, e) => LogValueChange(e, nameof(ExpandRam));
                 IgnoreMissingServices = new ReactiveObject<bool>();
                 IgnoreMissingServices.Event += static (sender, e) => LogValueChange(e, nameof(IgnoreMissingServices));
+                OverrideCoreCount = new ReactiveObject<bool>();
+                OverrideCoreCount.Event += static (sender, e) => LogValueChange(e, nameof(OverrideCoreCount));
+                CoreCount = new ReactiveObject<int>();
+                CoreCount.Event += static (sender, e) => LogValueChange(e, nameof(CoreCount));
                 AudioVolume = new ReactiveObject<float>();
                 AudioVolume.Event += static (sender, e) => LogValueChange(e, nameof(AudioVolume));
                 UseHypervisor = new ReactiveObject<bool>();
@@ -708,6 +722,8 @@ namespace Ryujinx.UI.Common.Configuration
                 MemoryManagerMode = System.MemoryManagerMode,
                 ExpandRam = System.ExpandRam,
                 IgnoreMissingServices = System.IgnoreMissingServices,
+                OverrideCoreCount = System.OverrideCoreCount,
+                CoreCount = System.CoreCount,
                 UseHypervisor = System.UseHypervisor,
                 GuiColumns = new GuiColumns
                 {
@@ -820,6 +836,8 @@ namespace Ryujinx.UI.Common.Configuration
             System.MemoryManagerMode.Value = MemoryManagerMode.HostMappedUnsafe;
             System.ExpandRam.Value = false;
             System.IgnoreMissingServices.Value = false;
+            System.OverrideCoreCount.Value = false;
+            System.CoreCount.Value = 4;
             System.UseHypervisor.Value = true;
             Multiplayer.LanInterfaceId.Value = "0";
             Multiplayer.Mode.Value = MultiplayerMode.Disabled;

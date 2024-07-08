@@ -9,11 +9,10 @@ namespace Ryujinx.HLE.HOS.Kernel.Threading
     partial class KScheduler : IDisposable
     {
         public const int PrioritiesCount = 64;
-        public const int CpuCoresCount = 4;
+        public const int DefaultCpuCoresCount = 4;
+        public static int CpuCoresCount;
 
         private const int RoundRobinTimeQuantumMs = 10;
-
-        private static readonly int[] _preemptionPriorities = { 59, 59, 59, 63 };
 
         private static readonly int[] _srcCoresHighestPrioThreads = new int[CpuCoresCount];
 
@@ -47,6 +46,13 @@ namespace Ryujinx.HLE.HOS.Kernel.Threading
             _coreId = coreId;
 
             _currentThread = null;
+
+            CpuCoresCount = context.Device.Configuration.OverrideCoreCount ? context.Device.Configuration.CoreCount : 4;
+        }
+
+        private static int PreemptionPriorities(int index)
+        {
+            return index == CpuCoresCount ? 63 : 59;
         }
 
         public static ulong SelectThreads(KernelContext context)
@@ -437,7 +443,7 @@ namespace Ryujinx.HLE.HOS.Kernel.Threading
 
                 for (int core = 0; core < CpuCoresCount; core++)
                 {
-                    RotateScheduledQueue(context, core, _preemptionPriorities[core]);
+                    RotateScheduledQueue(context, core, PreemptionPriorities(core));
                 }
 
                 context.CriticalSection.Leave();

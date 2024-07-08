@@ -671,6 +671,8 @@ namespace Ryujinx.UI
                 ConfigurationState.Instance.System.TimeZone,
                 ConfigurationState.Instance.System.MemoryManagerMode,
                 ConfigurationState.Instance.System.IgnoreMissingServices,
+                false,
+                4,
                 ConfigurationState.Instance.Graphics.AspectRatio,
                 ConfigurationState.Instance.System.AudioVolume,
                 ConfigurationState.Instance.System.UseHypervisor,

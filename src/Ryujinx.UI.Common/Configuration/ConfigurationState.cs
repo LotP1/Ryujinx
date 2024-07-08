@@ -1542,6 +1542,8 @@ namespace Ryujinx.UI.Common.Configuration
             System.MemoryManagerMode.Value = configurationFileFormat.MemoryManagerMode;
             System.ExpandRam.Value = configurationFileFormat.ExpandRam;
             System.IgnoreMissingServices.Value = configurationFileFormat.IgnoreMissingServices;
+            System.OverrideCoreCount.Value = configurationFileFormat.OverrideCoreCount;
+            System.CoreCount.Value = configurationFileFormat.CoreCount;
             System.UseHypervisor.Value = configurationFileFormat.UseHypervisor;
             UI.GuiColumns.FavColumn.Value = configurationFileFormat.GuiColumns.FavColumn;
             UI.GuiColumns.IconColumn.Value = configurationFileFormat.GuiColumns.IconColumn;

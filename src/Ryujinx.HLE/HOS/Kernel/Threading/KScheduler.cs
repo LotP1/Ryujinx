@@ -52,7 +52,7 @@ namespace Ryujinx.HLE.HOS.Kernel.Threading
 
         private static int PreemptionPriorities(int index)
         {
-            return index == CpuCoresCount ? 63 : 59;
+            return index == CpuCoresCount - 1 ? 63 : 59;
         }
 
         public static ulong SelectThreads(KernelContext context)

@@ -10,11 +10,10 @@ namespace Ryujinx.HLE.HOS.Kernel.Threading
     {
         public const int PrioritiesCount = 64;
         public const int DefaultCpuCoresCount = 4;
-        public static int CpuCoresCount;
 
         private const int RoundRobinTimeQuantumMs = 10;
 
-        private static readonly int[] _srcCoresHighestPrioThreads = new int[CpuCoresCount];
+        private static int[] _srcCoresHighestPrioThreads;
 
         private readonly KernelContext _context;
         private readonly int _coreId;
@@ -47,12 +46,15 @@ namespace Ryujinx.HLE.HOS.Kernel.Threading
 
             _currentThread = null;
 
-            CpuCoresCount = context.Device.Configuration.OverrideCoreCount ? context.Device.Configuration.CoreCount : 4;
+            if (_srcCoresHighestPrioThreads != null)
+            {
+                _srcCoresHighestPrioThreads = new int[context.Device.Configuration.UsedCoreCount];
+            }
         }
 
-        private static int PreemptionPriorities(int index)
+        private static int PreemptionPriorities(KernelContext context, int index)
         {
-            return index == CpuCoresCount - 1 ? 63 : 59;
+            return index == context.Device.Configuration.UsedCoreCount - 1 ? 63 : 59;
         }
 
         public static ulong SelectThreads(KernelContext context)
@@ -73,7 +75,7 @@ namespace Ryujinx.HLE.HOS.Kernel.Threading
 
             ulong scheduledCoresMask = 0UL;
 
-            for (int core = 0; core < CpuCoresCount; core++)
+            for (int core = 0; core < context.Device.Configuration.UsedCoreCount; core++)
             {
                 KThread thread = context.PriorityQueue.ScheduledThreadsFirstOrDefault(core);
 
@@ -100,7 +102,7 @@ namespace Ryujinx.HLE.HOS.Kernel.Threading
                 scheduledCoresMask |= context.Schedulers[core].SelectThread(thread);
             }
 
-            for (int core = 0; core < CpuCoresCount; core++)
+            for (int core = 0; core < context.Device.Configuration.UsedCoreCount; core++)
             {
                 // If the core is not idle (there's already a thread running on it),
                 // then we don't need to attempt load balancing.
@@ -304,7 +306,7 @@ namespace Ryujinx.HLE.HOS.Kernel.Threading
             currentThread.ThreadContext.Unlock();
 
             // Wake all the threads that might be waiting until this thread context is unlocked.
-            for (int core = 0; core < CpuCoresCount; core++)
+            for (int core = 0; core < _context.Device.Configuration.UsedCoreCount; core++)
             {
                 _context.Schedulers[core].NotifyIdleThread();
             }
@@ -441,9 +443,9 @@ namespace Ryujinx.HLE.HOS.Kernel.Threading
             {
                 context.CriticalSection.Enter();
 
-                for (int core = 0; core < CpuCoresCount; core++)
+                for (int core = 0; core < context.Device.Configuration.UsedCoreCount; core++)
                 {
-                    RotateScheduledQueue(context, core, PreemptionPriorities(core));
+                    RotateScheduledQueue(context, core, PreemptionPriorities(context, core));
                 }
 
                 context.CriticalSection.Leave();

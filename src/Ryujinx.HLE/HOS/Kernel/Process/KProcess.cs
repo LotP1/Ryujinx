@@ -90,6 +90,8 @@ namespace Ryujinx.HLE.HOS.Kernel.Process
 
         public HleProcessDebugger Debugger { get; private set; }
 
+        private KernelContext _context;
+
         public KProcess(KernelContext context, bool allowCodeMemoryForJit = false) : base(context)
         {
             AddressArbiter = new KAddressArbiter(context);
@@ -101,8 +103,8 @@ namespace Ryujinx.HLE.HOS.Kernel.Process
 
             AllowCodeMemoryForJit = allowCodeMemoryForJit;
 
-            RandomEntropy = new ulong[KScheduler.CpuCoresCount];
-            PinnedThreads = new KThread[KScheduler.CpuCoresCount];
+            RandomEntropy = new ulong[context.Device.Configuration.UsedCoreCount];
+            PinnedThreads = new KThread[context.Device.Configuration.UsedCoreCount];
 
             // TODO: Remove once we no longer need to initialize it externally.
             HandleTable = new KHandleTable();
@@ -168,7 +170,7 @@ namespace Ryujinx.HLE.HOS.Kernel.Process
                 return result;
             }
 
-            result = Capabilities.InitializeForKernel(capabilities, MemoryManager);
+            result = Capabilities.InitializeForKernel(capabilities, MemoryManager, _context);
 
             if (result != Result.Success)
             {
@@ -277,7 +279,7 @@ namespace Ryujinx.HLE.HOS.Kernel.Process
                 return result;
             }
 
-            result = Capabilities.InitializeForUser(capabilities, MemoryManager);
+            result = Capabilities.InitializeForUser(capabilities, MemoryManager, _context);
 
             if (result != Result.Success)
             {

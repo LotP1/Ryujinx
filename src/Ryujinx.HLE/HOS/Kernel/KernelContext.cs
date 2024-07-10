@@ -87,13 +87,13 @@ namespace Ryujinx.HLE.HOS.Kernel
             CommitMemory(KernelConstants.UserSlabHeapBase - DramMemoryMap.DramBase, KernelConstants.UserSlabHeapSize);
 
             CriticalSection = new KCriticalSection(this);
-            Schedulers = new KScheduler[KScheduler.CpuCoresCount];
-            PriorityQueue = new KPriorityQueue();
+            Schedulers = new KScheduler[device.Configuration.UsedCoreCount];
+            PriorityQueue = new KPriorityQueue(device);
             TimeManager = new KTimeManager(this);
             Synchronization = new KSynchronization(this);
             ContextIdManager = new KContextIdManager();
 
-            for (int core = 0; core < KScheduler.CpuCoresCount; core++)
+            for (int core = 0; core < device.Configuration.UsedCoreCount; core++)
             {
                 Schedulers[core] = new KScheduler(this, core);
             }
@@ -149,7 +149,7 @@ namespace Ryujinx.HLE.HOS.Kernel
         {
             Running = false;
 
-            for (int i = 0; i < KScheduler.CpuCoresCount; i++)
+            for (int i = 0; i < Device.Configuration.UsedCoreCount; i++)
             {
                 Schedulers[i].Dispose();
             }

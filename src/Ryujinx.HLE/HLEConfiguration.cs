@@ -151,6 +151,11 @@ namespace Ryujinx.HLE
         public int CoreCount { internal get; set; }
 
         /// <summary>
+        /// The amount of cores used for emulation.
+        /// </summary>
+        public int UsedCoreCount => OverrideCoreCount ? CoreCount : 4;
+
+        /// <summary>
         /// Aspect Ratio applied to the renderer window by the SurfaceFlinger service.
         /// </summary>
         public AspectRatio AspectRatio { get; set; }

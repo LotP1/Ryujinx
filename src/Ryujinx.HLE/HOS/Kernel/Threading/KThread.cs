@@ -119,7 +119,7 @@ namespace Ryujinx.HLE.HOS.Kernel.Threading
             WaitSyncObjects = new KSynchronizationObject[MaxWaitSyncObjects];
             WaitSyncHandles = new int[MaxWaitSyncObjects];
 
-            SiblingsPerCore = new LinkedListNode<KThread>[KScheduler.CpuCoresCount];
+            SiblingsPerCore = new LinkedListNode<KThread>[context.Device.Configuration.UsedCoreCount];
 
             _mutexWaiters = new LinkedList<KThread>();
             _pinnedWaiters = new LinkedList<KThread>();
@@ -447,7 +447,7 @@ namespace Ryujinx.HLE.HOS.Kernel.Threading
 
         private int GetEffectiveRunningCore()
         {
-            for (int coreNumber = 0; coreNumber < KScheduler.CpuCoresCount; coreNumber++)
+            for (int coreNumber = 0; coreNumber < KernelContext.Device.Configuration.UsedCoreCount; coreNumber++)
             {
                 if (KernelContext.Schedulers[coreNumber].CurrentThread == this)
                 {
@@ -1075,7 +1075,7 @@ namespace Ryujinx.HLE.HOS.Kernel.Threading
                     KernelContext.PriorityQueue.Unschedule(DynamicPriority, ActiveCore, this);
                 }
 
-                for (int core = 0; core < KScheduler.CpuCoresCount; core++)
+                for (int core = 0; core < KernelContext.Device.Configuration.UsedCoreCount; core++)
                 {
                     if (core != ActiveCore && ((AffinityMask >> core) & 1) != 0)
                     {
@@ -1091,7 +1091,7 @@ namespace Ryujinx.HLE.HOS.Kernel.Threading
                     KernelContext.PriorityQueue.Schedule(DynamicPriority, ActiveCore, this);
                 }
 
-                for (int core = 0; core < KScheduler.CpuCoresCount; core++)
+                for (int core = 0; core < KernelContext.Device.Configuration.UsedCoreCount; core++)
                 {
                     if (core != ActiveCore && ((AffinityMask >> core) & 1) != 0)
                     {
@@ -1116,7 +1116,7 @@ namespace Ryujinx.HLE.HOS.Kernel.Threading
                 KernelContext.PriorityQueue.Unschedule(oldPriority, ActiveCore, this);
             }
 
-            for (int core = 0; core < KScheduler.CpuCoresCount; core++)
+            for (int core = 0; core < KernelContext.Device.Configuration.UsedCoreCount; core++)
             {
                 if (core != ActiveCore && ((AffinityMask >> core) & 1) != 0)
                 {
@@ -1139,7 +1139,7 @@ namespace Ryujinx.HLE.HOS.Kernel.Threading
                 }
             }
 
-            for (int core = 0; core < KScheduler.CpuCoresCount; core++)
+            for (int core = 0; core < KernelContext.Device.Configuration.UsedCoreCount; core++)
             {
                 if (core != ActiveCore && ((AffinityMask >> core) & 1) != 0)
                 {
@@ -1158,7 +1158,7 @@ namespace Ryujinx.HLE.HOS.Kernel.Threading
             }
 
             // Remove thread from the old priority queues.
-            for (int core = 0; core < KScheduler.CpuCoresCount; core++)
+            for (int core = 0; core < KernelContext.Device.Configuration.UsedCoreCount; core++)
             {
                 if (((oldAffinityMask >> core) & 1) != 0)
                 {
@@ -1174,7 +1174,7 @@ namespace Ryujinx.HLE.HOS.Kernel.Threading
             }
 
             // Add thread to the new priority queues.
-            for (int core = 0; core < KScheduler.CpuCoresCount; core++)
+            for (int core = 0; core < KernelContext.Device.Configuration.UsedCoreCount; core++)
             {
                 if (((AffinityMask >> core) & 1) != 0)
                 {

@@ -28,22 +28,22 @@ namespace Ryujinx.HLE.HOS.Kernel.Process
             IrqAccessMask = new byte[0x80];
         }
 
-        public Result InitializeForKernel(ReadOnlySpan<uint> capabilities, KPageTableBase memoryManager)
+        public Result InitializeForKernel(ReadOnlySpan<uint> capabilities, KPageTableBase memoryManager, KernelContext context)
         {
             AllowedCpuCoresMask = 0xf;
             AllowedThreadPriosMask = ulong.MaxValue;
             DebuggingFlags &= ~3u;
             KernelReleaseVersion = KProcess.KernelVersionPacked;
 
-            return Parse(capabilities, memoryManager);
+            return Parse(capabilities, memoryManager, context);
         }
 
-        public Result InitializeForUser(ReadOnlySpan<uint> capabilities, KPageTableBase memoryManager)
+        public Result InitializeForUser(ReadOnlySpan<uint> capabilities, KPageTableBase memoryManager, KernelContext context)
         {
-            return Parse(capabilities, memoryManager);
+            return Parse(capabilities, memoryManager, context);
         }
 
-        private Result Parse(ReadOnlySpan<uint> capabilities, KPageTableBase memoryManager)
+        private Result Parse(ReadOnlySpan<uint> capabilities, KPageTableBase memoryManager, KernelContext context)
         {
             int mask0 = 0;
             int mask1 = 0;
@@ -54,7 +54,7 @@ namespace Ryujinx.HLE.HOS.Kernel.Process
 
                 if (cap.GetCapabilityType() != CapabilityType.MapRange)
                 {
-                    Result result = ParseCapability(cap, ref mask0, ref mask1, memoryManager);
+                    Result result = ParseCapability(cap, ref mask0, ref mask1, memoryManager, context);
 
                     if (result != Result.Success)
                     {
@@ -120,7 +120,7 @@ namespace Ryujinx.HLE.HOS.Kernel.Process
             return Result.Success;
         }
 
-        private Result ParseCapability(uint cap, ref int mask0, ref int mask1, KPageTableBase memoryManager)
+        private Result ParseCapability(uint cap, ref int mask0, ref int mask1, KPageTableBase memoryManager, KernelContext context)
         {
             CapabilityType code = cap.GetCapabilityType();
 
@@ -168,14 +168,14 @@ namespace Ryujinx.HLE.HOS.Kernel.Process
                             return KernelResult.InvalidCombination;
                         }
 
-                        if (KScheduler.CpuCoresCount == KScheduler.DefaultCpuCoresCount && highestCpuCore >= KScheduler.CpuCoresCount)
+                        if (context.Device.Configuration.UsedCoreCount == KScheduler.DefaultCpuCoresCount && highestCpuCore >= context.Device.Configuration.UsedCoreCount)
                         {
                             return KernelResult.InvalidCpuCore;
                         }
 
-                        if (KScheduler.CpuCoresCount != KScheduler.DefaultCpuCoresCount)
+                        if (context.Device.Configuration.UsedCoreCount != KScheduler.DefaultCpuCoresCount)
                         {
-                            highestCpuCore = (uint)KScheduler.CpuCoresCount - 2; //cpu cores are 0 indexed, highest cpu core should not include the main thread core
+                            highestCpuCore = (uint)context.Device.Configuration.UsedCoreCount - 2; //cpu cores are 0 indexed, highest cpu core should not include the main thread core
                         }
 
                         AllowedCpuCoresMask = GetMaskFromMinMax(lowestCpuCore, highestCpuCore);

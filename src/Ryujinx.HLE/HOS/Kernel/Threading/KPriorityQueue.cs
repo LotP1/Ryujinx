@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Numerics;
 
 namespace Ryujinx.HLE.HOS.Kernel.Threading
@@ -11,25 +12,25 @@ namespace Ryujinx.HLE.HOS.Kernel.Threading
         private readonly long[] _scheduledPrioritiesPerCore;
         private readonly long[] _suggestedPrioritiesPerCore;
 
-        public KPriorityQueue()
+        public KPriorityQueue(Switch device)
         {
             _suggestedThreadsPerPrioPerCore = new LinkedList<KThread>[KScheduler.PrioritiesCount][];
             _scheduledThreadsPerPrioPerCore = new LinkedList<KThread>[KScheduler.PrioritiesCount][];
 
             for (int prio = 0; prio < KScheduler.PrioritiesCount; prio++)
             {
-                _suggestedThreadsPerPrioPerCore[prio] = new LinkedList<KThread>[KScheduler.CpuCoresCount];
-                _scheduledThreadsPerPrioPerCore[prio] = new LinkedList<KThread>[KScheduler.CpuCoresCount];
+                _suggestedThreadsPerPrioPerCore[prio] = new LinkedList<KThread>[device.Configuration.UsedCoreCount];
+                _scheduledThreadsPerPrioPerCore[prio] = new LinkedList<KThread>[device.Configuration.UsedCoreCount];
 
-                for (int core = 0; core < KScheduler.CpuCoresCount; core++)
+                for (int core = 0; core < device.Configuration.UsedCoreCount; core++)
                 {
                     _suggestedThreadsPerPrioPerCore[prio][core] = new LinkedList<KThread>();
                     _scheduledThreadsPerPrioPerCore[prio][core] = new LinkedList<KThread>();
                 }
             }
 
-            _scheduledPrioritiesPerCore = new long[KScheduler.CpuCoresCount];
-            _suggestedPrioritiesPerCore = new long[KScheduler.CpuCoresCount];
+            _scheduledPrioritiesPerCore = new long[device.Configuration.UsedCoreCount];
+            _suggestedPrioritiesPerCore = new long[device.Configuration.UsedCoreCount];
         }
 
         public readonly ref struct KThreadEnumerable

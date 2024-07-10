@@ -159,7 +159,7 @@ namespace Ryujinx.HLE.HOS.Kernel.SupervisorCall
                 return KernelResult.InvalidHandle;
             }
 
-            if ((uint)cpuCore >= KScheduler.CpuCoresCount || !process.IsCpuCoreAllowed(cpuCore))
+            if ((uint)cpuCore >= _context.Device.Configuration.UsedCoreCount || !process.IsCpuCoreAllowed(cpuCore))
             {
                 return KernelResult.InvalidCpuCore;
             }
@@ -2491,7 +2491,7 @@ namespace Ryujinx.HLE.HOS.Kernel.SupervisorCall
                 cpuCore = currentProcess.DefaultCpuCore;
             }
 
-            if ((uint)cpuCore >= KScheduler.CpuCoresCount || !currentProcess.IsCpuCoreAllowed(cpuCore))
+            if ((uint)cpuCore >= _context.Device.Configuration.UsedCoreCount || !currentProcess.IsCpuCoreAllowed(cpuCore))
             {
                 return KernelResult.InvalidCpuCore;
             }

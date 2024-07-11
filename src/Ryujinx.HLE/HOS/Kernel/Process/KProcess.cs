@@ -112,6 +112,8 @@ namespace Ryujinx.HLE.HOS.Kernel.Process
             _threads = new LinkedList<KThread>();
 
             Debugger = new HleProcessDebugger(this);
+
+            _context = context;
         }
 
         public Result InitializeKip(

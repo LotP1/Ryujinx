@@ -46,7 +46,7 @@ namespace Ryujinx.HLE.HOS.Kernel.Threading
 
             _currentThread = null;
 
-            if (_srcCoresHighestPrioThreads != null)
+            if (_srcCoresHighestPrioThreads == null)
             {
                 _srcCoresHighestPrioThreads = new int[context.Device.Configuration.UsedCoreCount];
             }

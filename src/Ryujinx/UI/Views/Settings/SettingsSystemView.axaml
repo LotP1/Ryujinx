@@ -225,7 +225,7 @@
                             IsChecked="{Binding OverrideCoreCount}"
                             ToolTip.Tip="No Tooltip"
                             Width="250">
-                            <TextBlock Text="Override CPU Core limit" />
+                            <TextBlock Text="Override CPU Core count" />
                         </CheckBox>
                         <ui:NumberBox
                                 Maximum="{Binding CoreLimit}"

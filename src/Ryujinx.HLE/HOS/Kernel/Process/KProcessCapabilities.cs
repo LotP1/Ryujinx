@@ -168,12 +168,12 @@ namespace Ryujinx.HLE.HOS.Kernel.Process
                             return KernelResult.InvalidCombination;
                         }
 
-                        if (context.Device.Configuration.UsedCoreCount == KScheduler.DefaultCpuCoresCount && highestCpuCore >= context.Device.Configuration.UsedCoreCount)
+                        if (!context.Device.Configuration.OverrideCoreCount  && highestCpuCore >= KScheduler.DefaultCpuCoresCount)
                         {
                             return KernelResult.InvalidCpuCore;
                         }
 
-                        if (context.Device.Configuration.UsedCoreCount != KScheduler.DefaultCpuCoresCount)
+                        if (context.Device.Configuration.OverrideCoreCount)
                         {
                             highestCpuCore = (uint)context.Device.Configuration.UsedCoreCount - 2; //cpu cores are 0 indexed, highest cpu core should not include the main thread core
                         }

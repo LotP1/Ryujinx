@@ -225,7 +225,7 @@ namespace Ryujinx.Headless.SDL2
         [Option("ignore-missing-services", Required = false, Default = false, HelpText = "Enable ignoring missing services.")]
         public bool IgnoreMissingServices { get; set; }
 
-        [Option("override-core-count", Required = false, Default = 4, HelpText = "Override the amount of cores used for emulation.")]
+        [Option("override-core-count", Required = false, Default = 0, HelpText = "Override the amount of cores used for emulation.")]
         public int CoreCount { get; set; }
 
         // Values

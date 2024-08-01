@@ -144,7 +144,8 @@ namespace Ryujinx.Ava.UI.ViewModels
         public bool ExpandDramSize { get; set; }
         public bool OverrideCoreCount { get; set; }
         public int CoreCount { get; set; }
-        public int CoreLimit => Environment.ProcessorCount < 4 ? 4 : (Environment.ProcessorCount > 32 ? 32 : Environment.ProcessorCount);
+        private int ProcessorCount => Environment.ProcessorCount - 2;
+        public int CoreLimit => ProcessorCount < 4 ? 4 : (ProcessorCount > 32 ? 32 : ProcessorCount);
         public bool EnableShaderCache { get; set; }
         public bool EnableTextureRecompression { get; set; }
         public bool EnableMacroHLE { get; set; }

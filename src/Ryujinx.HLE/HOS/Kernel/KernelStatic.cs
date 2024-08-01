@@ -37,7 +37,7 @@ namespace Ryujinx.HLE.HOS.Kernel
                 return result;
             }
 
-            process.DefaultCpuCore = 3;
+            process.DefaultCpuCore = context.Device.Configuration.UsedCoreCount - 1;
 
             context.Processes.TryAdd(process.Pid, process);
 

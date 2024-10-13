@@ -9,7 +9,6 @@ namespace Ryujinx.HLE.HOS.Kernel.Threading
     partial class KScheduler : IDisposable
     {
         public const int PrioritiesCount = 64;
-        public const int DefaultCpuCoresCount = 4;
 
         private const int RoundRobinTimeQuantumMs = 10;
 

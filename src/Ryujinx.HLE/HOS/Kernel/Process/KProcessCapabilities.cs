@@ -168,7 +168,7 @@ namespace Ryujinx.HLE.HOS.Kernel.Process
                             return KernelResult.InvalidCombination;
                         }
 
-                        if (!context.Device.Configuration.OverrideCoreCount  && highestCpuCore >= KScheduler.DefaultCpuCoresCount)
+                        if (!context.Device.Configuration.OverrideCoreCount && highestCpuCore >= context.Device.Configuration.UsedCoreCount)
                         {
                             return KernelResult.InvalidCpuCore;
                         }
